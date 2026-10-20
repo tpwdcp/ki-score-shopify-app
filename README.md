@@ -4,8 +4,7 @@ Shopify app that brings the visits from AI assistants (ChatGPT, Google AI
 Mode and Gemini, Microsoft Copilot, Shop …) of a Shopify store into
 [KIscore](https://kiscore.ai). It is an extension-only app: Shopify handles
 installation, and the KIscore backend reads the store's own session
-statistics. Research and decisions behind it:
-`docs/shopify-integration-research-2026-10-20.md` in the KIscore repository.
+statistics.
 
 ## How it works
 
