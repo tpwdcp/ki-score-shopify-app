@@ -8,5 +8,9 @@
     "preact-iso": "^2.9.1",
     "@preact/signals": "^2.3.x",
     "@shopify/ui-extensions": "~2026.10.0"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js"
   }
 }

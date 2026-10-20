@@ -10,4 +10,4 @@ type = "ui_extension"
 [[extensions.targeting]]
 module = "./src/AppHome.jsx"
 target = "admin.app.home.render"
-assets = "./assets"
+

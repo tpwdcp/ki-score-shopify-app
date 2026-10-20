@@ -1,4 +1,26 @@
 {
-  "name": "app-home",
-  "welcome": "Welcome to the {{target}} extension!"
+  "name": "KIscore",
+  "heading": "KIscore",
+  "loading": "Loading connection",
+  "statusHeading": "Connection",
+  "statusConnected": "Connected to KIscore website {{siteId}}. Visits from AI answers are reported.",
+  "statusNotConnected": "Not connected yet. Paste the connection key of your website from KIscore.",
+  "intro": "KIscore shows how often your shop appears in AI answers. This app adds the visits that come to your shop from ChatGPT, Perplexity, Gemini and other AI assistants.",
+  "connectHeading": "Connect with KIscore",
+  "changeHeading": "Connect another KIscore website",
+  "keyLabel": "Connection key",
+  "keyHelp": "You find the key in KIscore under Settings › Traffic tracking.",
+  "keyHelpLink": "Open KIscore",
+  "connectButton": "Connect",
+  "connected": "Connected with KIscore",
+  "dataHeading": "What the app sends",
+  "dataDescription": "Only page views that arrive from another website or with utm parameters, and only with the visitor's consent to statistics: the page path, the utm parameters and the referring website. No customer data, no cookies.",
+  "crawlerLimit": "Visits of AI crawlers such as GPTBot cannot be measured on Shopify, as Shopify gives apps no access to requests of the online store.",
+  "errors": {
+    "invalidKey": "This is not a connection key. Copy it again from KIscore; it has the form site-id.secret.",
+    "rejected": "KIscore did not accept this key. Check that you copied the key of the right website.",
+    "failed": "KIscore could not connect the shop. Please try again later.",
+    "unreachable": "KIscore could not be reached. Check your connection and try again.",
+    "pixel": "The shop is connected, but the tracking could not be switched on. Please try again."
+  }
 }
