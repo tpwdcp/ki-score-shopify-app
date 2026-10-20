@@ -12,8 +12,9 @@ api_version = "2027-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-# The web pixel needs write_pixels and read_customer_events.
-scopes = "write_pixels,read_customer_events"
+# The web pixel needs write_pixels and read_customer_events; read_reports is
+# for testing ShopifyQL sessions (AI channels, bot share), not yet released.
+scopes = "write_pixels,read_customer_events,read_reports"
 
 # The app home activates the pixel with webPixelCreate from the browser.
 [access.admin]
