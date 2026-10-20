@@ -34,3 +34,7 @@ shared/types/graphql
 *.njsproj
 *.sln
 *.sw?
+# Build output of shopify app build
+dist
+extensions/*/manifest.json
+extensions/app-home/*.png
