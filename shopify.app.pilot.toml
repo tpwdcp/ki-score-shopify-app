@@ -9,18 +9,12 @@ embedded = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-# Same as shopify.app.toml; read_reports is for the ShopifyQL test with the
-# pilot shop (AI channels and bot share of its sessions).
-scopes = "write_pixels,read_customer_events,read_reports"
+# read_reports: KIscore reads the shop's session statistics (ShopifyQL).
+scopes = "read_reports"
 
 [access.admin]
 embedded_app_direct_api_access = true
 direct_api_mode = "online"
-
-[app_proxy]
-url = "https://api.kiscore.ai/shopify/app_proxy"
-prefix = "apps"
-subpath = "kiscore"
 
 [auth]
 redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]

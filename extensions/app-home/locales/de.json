@@ -3,9 +3,9 @@
   "heading": "KIscore",
   "loading": "Verbindung wird geladen",
   "statusHeading": "Verbindung",
-  "statusConnected": "Verbunden mit der KIscore-Website {{siteId}}. Besuche aus KI-Antworten werden gemeldet.",
+  "statusConnected": "Verbunden mit der KIscore-Website {{siteId}}. KIscore übernimmt die Besuche aus KI-Antworten jede Nacht.",
   "statusNotConnected": "Noch nicht verbunden. Füge den Verbindungsschlüssel deiner Website aus KIscore ein.",
-  "intro": "KIscore zeigt, wie oft dein Shop in KI-Antworten vorkommt. Diese App ergänzt die Besuche, die von ChatGPT, Perplexity, Gemini und anderen KI-Assistenten in deinen Shop kommen.",
+  "intro": "KIscore zeigt, wie oft dein Shop in KI-Antworten vorkommt. Mit dieser App zeigt KIscore auch die Besuche, die über ChatGPT, Gemini, Copilot und andere KI-Assistenten in deinen Shop kommen.",
   "connectHeading": "Mit KIscore verbinden",
   "changeHeading": "Andere KIscore-Website verbinden",
   "keyLabel": "Verbindungsschlüssel",
@@ -13,14 +13,14 @@
   "keyHelpLink": "KIscore öffnen",
   "connectButton": "Verbinden",
   "connected": "Mit KIscore verbunden",
-  "dataHeading": "Was die App sendet",
-  "dataDescription": "Nur Seitenaufrufe, die von einer anderen Website oder mit utm-Parametern kommen, und nur mit Einwilligung der Besucher zur Statistik: den Pfad der Seite, die utm-Parameter und die verweisende Website. Keine Kundendaten, keine Cookies.",
+  "dataHeading": "Was KIscore liest",
+  "dataDescription": "KIscore liest Shopifys eigene Sitzungsstatistik deines Shops: Besuche aus KI-Kanälen und den Anteil der Bots, je Tag und Seite. Die App fügt deinem Shop keinen Code hinzu, und es werden keine Kundendaten übertragen.",
   "crawlerLimit": "Besuche von KI-Crawlern wie GPTBot lassen sich auf Shopify nicht messen, weil Shopify Apps keinen Zugriff auf die Anfragen an den Onlineshop gibt.",
   "errors": {
     "invalidKey": "Das ist kein Verbindungsschlüssel. Kopiere ihn erneut aus KIscore, er hat die Form site-id.secret.",
     "rejected": "KIscore hat diesen Schlüssel nicht angenommen. Prüfe, ob du den Schlüssel der richtigen Website kopiert hast.",
     "failed": "KIscore konnte den Shop nicht verbinden. Bitte versuche es später erneut.",
     "unreachable": "KIscore ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
-    "pixel": "Der Shop ist verbunden, aber das Tracking ließ sich nicht einschalten. Bitte versuche es erneut."
+    "store": "Der Shop ist verbunden, aber die App konnte die Verbindung nicht speichern. Bitte versuche es erneut."
   }
 }

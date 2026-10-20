@@ -4,5 +4,5 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-- Web pixel reports page views with `utm_*` parameters or an external referrer to the KIscore app proxy, with the path, the utm parameters and the referrer's origin.
-- App home connects the shop with a KIscore website by its connection key and activates the pixel.
+- App home connects the shop with a KIscore website by its connection key; KIscore then reads the shop's ShopifyQL session statistics (AI channels, bots).
+- The web pixel and app proxy of the first draft are gone: Shopify's own statistics cover the AI channels without code in the store and need only `read_reports`.

@@ -1,6 +1,6 @@
-// Connects the shop to a website in KIscore and activates the web pixel.
-// The connection key holds the tracking secret of the website; it goes to
-// KIscore once and is never stored in Shopify.
+// Connects the shop to a website in KIscore. KIscore then reads the shop's
+// session statistics itself. The connection key holds the tracking secret of
+// the website; it goes to KIscore once and is never stored in Shopify.
 
 const CONNECTION_KEY = /^([A-Za-z0-9-]+)\.([A-Za-z0-9_-]+)$/
 
@@ -10,29 +10,15 @@ export function parseConnectionKey(value) {
   return match ? { siteId: match[1], secret: match[2] } : null
 }
 
-const PIXEL_QUERY = "query { webPixel { id settings } }"
+const CONNECTION_QUERY = `query {
+  currentAppInstallation { id metafield(namespace: "kiscore", key: "site_id") { value } }
+}`
 
-// The site ID the pixel reports for, null while the app has no pixel.
-export function pixelSiteId(response) {
-  return pixelSettings(response)?.siteId ?? null
-}
-
-export function pixelId(response) {
-  return response?.data?.webPixel?.id ?? null
-}
-
-function pixelSettings(response) {
-  const settings = response?.data?.webPixel?.settings
-  if (!settings) return null
-  try {
-    return typeof settings === "string" ? JSON.parse(settings) : settings
-  } catch {
-    return null
-  }
-}
-
-export async function loadPixel(graphql) {
-  return graphql(PIXEL_QUERY)
+// The KIscore website this shop is connected to, null before the first
+// connection. It lives in a metafield of the app's own installation.
+export async function loadConnection(graphql) {
+  const installation = (await graphql(CONNECTION_QUERY))?.data?.currentAppInstallation
+  return { installationId: installation?.id ?? null, siteId: installation?.metafield?.value ?? null }
 }
 
 // KIscore checks the Shopify ID token (signed with the app's client secret)
@@ -40,7 +26,7 @@ export async function loadPixel(graphql) {
 export async function connectShop({ apiBase, connectionKey, idToken, fetch }) {
   let response
   try {
-    response = await fetch(`${apiBase.replace(/\/+$/, "")}/shopify/connections`, {
+    response = await fetch(`${apiBase.replace(/\/+$/, "")}/api/v1/shopify/connections`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
       body: JSON.stringify({ connection_key: connectionKey }),
@@ -58,20 +44,17 @@ export async function connectShop({ apiBase, connectionKey, idToken, fetch }) {
   return { ok: true, siteId: body.site_id }
 }
 
-const CREATE_PIXEL = `mutation webPixelCreate($webPixel: WebPixelInput!) {
-  webPixelCreate(webPixel: $webPixel) { userErrors { field message code } }
+const SAVE_CONNECTION = `mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
+  metafieldsSet(metafields: $metafields) { userErrors { field message code } }
 }`
 
-const UPDATE_PIXEL = `mutation webPixelUpdate($id: ID!, $webPixel: WebPixelInput!) {
-  webPixelUpdate(id: $id, webPixel: $webPixel) { userErrors { field message code } }
-}`
-
-export async function activatePixel({ graphql, siteId, pixelId }) {
-  const webPixel = { settings: JSON.stringify({ siteId }) }
-  const response = pixelId
-    ? await graphql(UPDATE_PIXEL, { id: pixelId, webPixel })
-    : await graphql(CREATE_PIXEL, { webPixel })
-  const payload = response?.data?.[pixelId ? "webPixelUpdate" : "webPixelCreate"]
+export async function saveConnection({ graphql, installationId, siteId }) {
+  const response = await graphql(SAVE_CONNECTION, {
+    metafields: [
+      { ownerId: installationId, namespace: "kiscore", key: "site_id", type: "single_line_text_field", value: siteId },
+    ],
+  })
+  const payload = response?.data?.metafieldsSet
   const failed = !payload || response.errors?.length || payload.userErrors?.length
-  return failed ? { ok: false, error: "pixel" } : { ok: true }
+  return failed ? { ok: false, error: "store" } : { ok: true }
 }

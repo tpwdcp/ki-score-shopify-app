@@ -1,53 +1,67 @@
 # KIscore for Shopify
 
-Shopify app that reports visits from AI assistants (ChatGPT, Perplexity,
-Gemini …) of a Shopify store to [KIscore](https://kiscore.ai). It is an
-extension-only app: Shopify handles installation, and the KIscore backend
-receives the data. Research and decisions behind it:
+Shopify app that brings the visits from AI assistants (ChatGPT, Google AI
+Mode and Gemini, Microsoft Copilot, Shop …) of a Shopify store into
+[KIscore](https://kiscore.ai). It is an extension-only app: Shopify handles
+installation, and the KIscore backend reads the store's own session
+statistics. Research and decisions behind it:
 `docs/shopify-integration-research-2026-10-20.md` in the KIscore repository.
 
-## What it does
+## How it works
 
-- **App home** (`extensions/app-home`): the merchant pastes the connection key
-  of the website from KIscore. The app sends it once to KIscore together with
-  the Shopify ID token, then activates the web pixel with the public site ID.
-- **Web pixel** (`extensions/kiscore-pixel`): for page views with `utm_*`
-  parameters or an external referrer it posts the path, the utm parameters and
-  the origin of the referrer to the app proxy `/apps/kiscore/track` of the store. It runs
-  only with analytics consent and holds no secret.
-- **App proxy** (`shopify.app.toml`): Shopify forwards `/apps/kiscore/*` to
-  KIscore and signs each request (HMAC over the query parameters, including
-  `shop`).
+1. The merchant installs the app and opens it in the Shopify admin
+   (`extensions/app-home`).
+2. They paste the connection key of their website from KIscore
+   (Settings › Traffic tracking › Shopify). The app sends it once to KIscore
+   with the Shopify ID token and stores the connected site ID in a metafield
+   of its own installation.
+3. KIscore verifies the ID token with the app's client secret, exchanges it
+   for an expiring offline access token and reads the store's ShopifyQL
+   `sessions`: human sessions per AI source and landing page, and bot sessions
+   per landing page, as daily counts. It imports 90 days at once and the last
+   days every night.
 
-AI crawlers (GPTBot, ClaudeBot …) cannot be measured on Shopify: merchants
-cannot put a proxy in front of the store, and Shopify offers apps no access to
-storefront requests.
+The app adds no code to the store and transfers no customer data. AI crawlers
+(GPTBot, ClaudeBot …) cannot be measured individually on Shopify: merchants
+cannot put a proxy in front of the store, and Shopify reports bots only as a
+class.
 
-## KIscore backend contract
+## Access
 
-Both endpoints still have to be built in the KIscore backend.
+- `read_reports` for ShopifyQL. Shopify also requires level 2 access to
+  protected customer data for `shopifyqlQuery`, although KIscore reads only
+  session counts.
+- No other scopes. The app home stores its own metafield through direct API
+  access.
 
-| Endpoint | Auth | Body | Answer |
-| --- | --- | --- | --- |
-| `POST https://api.kiscore.ai/shopify/connections` | `Authorization: Bearer <Shopify ID token>`, a JWT signed with the app's client secret; `dest` names the shop | `{ "connection_key": "<site-id>.<secret>" }` | `201 { "site_id": "…" }`; `401`/`422` for a token or key that is not valid |
-| `POST https://api.kiscore.ai/shopify/app_proxy/track` | Shopify app proxy `signature` over the query parameters, with `shop` and `timestamp` | `{ "url": "/path?utm_source=…", "referrer": "https://chatgpt.com", "site_id": "…" }` | `204`; only AI referrals are stored, for the website connected to `shop` |
+## KIscore backend
 
-The connections endpoint is called from the Shopify admin (app home), so it
-needs CORS for the extension's origin. The client secret of the app belongs
-into the KIscore credentials, never into this repository. Before a public
-release the app also needs the mandatory compliance webhooks
-(`customers/data_request`, `customers/redact`, `shop/redact`).
+`POST https://api.kiscore.ai/api/v1/shopify/connections` with
+`Authorization: Bearer <Shopify ID token>` and
+`{ "connection_key": "<site-id>.<secret>" }` answers `201 { "site_id": "…" }`,
+`401` for an invalid token and `422` for a key that belongs to no website.
+The client secrets of both apps belong into the KIscore credentials
+(`shopify.apps`), never into this repository.
+
+## Apps
+
+| Config | App | Distribution |
+| --- | --- | --- |
+| `shopify.app.toml` | KIscore | public, after review |
+| `shopify.app.pilot.toml` | KIscore Pilot | custom, one pilot store |
+
+A distribution method cannot be changed once selected, hence two apps from
+one code base.
 
 ## Development
 
 ```bash
 npm install
-shopify app dev           # installs the app on the dev store, e.g. kiscore-testing
-npm test --workspaces     # unit tests of the pixel and the app home
+shopify app dev                      # dev store, e.g. kiscore-testing
+npm test --workspaces
 shopify app build
-shopify app deploy        # publishes a new app version (configuration and extensions)
+shopify app deploy --config pilot    # new version of the pilot app
 ```
 
-The app is linked to "KIscore" in the TPWD AG partner organization
-(`client_id` in `shopify.app.toml`). Merchant-facing texts live in
-`extensions/*/locales` in English and German.
+Merchant-facing texts live in `extensions/app-home/locales` in English and
+German.

@@ -12,21 +12,13 @@ api_version = "2027-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-# The web pixel needs write_pixels and read_customer_events; read_reports is
-# for testing ShopifyQL sessions (AI channels, bot share), not yet released.
-scopes = "write_pixels,read_customer_events,read_reports"
+# read_reports: KIscore reads the shop's session statistics (ShopifyQL).
+scopes = "read_reports"
 
-# The app home activates the pixel with webPixelCreate from the browser.
+# The app home stores the connection in a metafield through the Admin API.
 [access.admin]
 embedded_app_direct_api_access = true
 direct_api_mode = "online"
-
-# Storefront requests to /apps/kiscore/* reach KIscore signed by Shopify.
-# The endpoint in the KIscore backend is still to be built.
-[app_proxy]
-url = "https://api.kiscore.ai/shopify/app_proxy"
-prefix = "apps"
-subpath = "kiscore"
 
 [auth]
 redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]

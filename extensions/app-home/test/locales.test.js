@@ -24,7 +24,7 @@ test("German and English have the same keys and placeholders", () => {
 test("the connect page uses only existing keys", () => {
   const source = readFileSync(new URL("../src/ConnectPage.jsx", import.meta.url), "utf8")
   const used = [...source.matchAll(/\bt\("([\w.]+)"/g)].map((match) => match[1])
-  const errors = ["invalidKey", "rejected", "failed", "unreachable", "pixel"].map((error) => `errors.${error}`)
+  const errors = ["invalidKey", "rejected", "failed", "unreachable", "store"].map((error) => `errors.${error}`)
   const known = new Set(keys(load("en.default")))
   for (const key of [...used, ...errors]) assert.ok(known.has(key), key)
 })

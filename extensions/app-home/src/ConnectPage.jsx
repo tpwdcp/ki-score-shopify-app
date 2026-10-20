@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks"
 
-import { activatePixel, connectShop, loadPixel, parseConnectionKey, pixelId, pixelSiteId } from "./kiscore.js"
+import { connectShop, loadConnection, parseConnectionKey, saveConnection } from "./kiscore.js"
 
 const KISCORE_API = "https://api.kiscore.ai"
 const KISCORE_TRACKING_SETTINGS = "https://toolkit.kiscore.ai/dashboard/integration"
@@ -16,14 +16,13 @@ async function graphql(query, variables) {
 
 export default function ConnectPage() {
   const t = (key, values) => shopify.i18n.translate(key, values)
-  const [pixel, setPixel] = useState({ loading: true, id: null, siteId: null })
+  const [connection, setConnection] = useState({ loading: true, installationId: null, siteId: null })
   const [key, setKey] = useState("")
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
 
   const refresh = async () => {
-    const response = await loadPixel(graphql)
-    setPixel({ loading: false, id: pixelId(response), siteId: pixelSiteId(response) })
+    setConnection({ loading: false, ...(await loadConnection(graphql)) })
   }
 
   useEffect(() => {
@@ -38,19 +37,23 @@ export default function ConnectPage() {
     }
     setSaving(true)
     try {
-      const connection = await connectShop({
+      const result = await connectShop({
         apiBase: KISCORE_API,
         connectionKey: key.trim(),
         idToken: await shopify.idToken(),
         fetch,
       })
-      if (!connection.ok) {
-        setError(connection.error)
+      if (!result.ok) {
+        setError(result.error)
         return
       }
-      const activation = await activatePixel({ graphql, siteId: connection.siteId, pixelId: pixel.id })
-      if (!activation.ok) {
-        setError(activation.error)
+      const stored = await saveConnection({
+        graphql,
+        installationId: connection.installationId,
+        siteId: result.siteId,
+      })
+      if (!stored.ok) {
+        setError(stored.error)
         return
       }
       setKey("")
@@ -64,17 +67,17 @@ export default function ConnectPage() {
   return (
     <s-page heading={t("heading")}>
       <s-section heading={t("statusHeading")}>
-        {pixel.loading ? (
+        {connection.loading ? (
           <s-spinner accessibilityLabel={t("loading")} />
-        ) : pixel.siteId ? (
-          <s-banner tone="success">{t("statusConnected", { siteId: pixel.siteId })}</s-banner>
+        ) : connection.siteId ? (
+          <s-banner tone="success">{t("statusConnected", { siteId: connection.siteId })}</s-banner>
         ) : (
           <s-banner tone="info">{t("statusNotConnected")}</s-banner>
         )}
         <s-paragraph>{t("intro")}</s-paragraph>
       </s-section>
 
-      <s-section heading={pixel.siteId ? t("changeHeading") : t("connectHeading")}>
+      <s-section heading={connection.siteId ? t("changeHeading") : t("connectHeading")}>
         <s-stack gap="base">
           {/* The key holds the tracking secret: masked like a password. */}
           <s-password-field

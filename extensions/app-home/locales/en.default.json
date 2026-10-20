@@ -3,9 +3,9 @@
   "heading": "KIscore",
   "loading": "Loading connection",
   "statusHeading": "Connection",
-  "statusConnected": "Connected to KIscore website {{siteId}}. Visits from AI answers are reported.",
+  "statusConnected": "Connected to KIscore website {{siteId}}. KIscore imports the visits from AI answers every night.",
   "statusNotConnected": "Not connected yet. Paste the connection key of your website from KIscore.",
-  "intro": "KIscore shows how often your shop appears in AI answers. This app adds the visits that come to your shop from ChatGPT, Perplexity, Gemini and other AI assistants.",
+  "intro": "KIscore shows how often your shop appears in AI answers. With this app it also shows the visits that come to your shop from ChatGPT, Gemini, Copilot and other AI assistants.",
   "connectHeading": "Connect with KIscore",
   "changeHeading": "Connect another KIscore website",
   "keyLabel": "Connection key",
@@ -13,14 +13,14 @@
   "keyHelpLink": "Open KIscore",
   "connectButton": "Connect",
   "connected": "Connected with KIscore",
-  "dataHeading": "What the app sends",
-  "dataDescription": "Only page views that arrive from another website or with utm parameters, and only with the visitor's consent to statistics: the page path, the utm parameters and the referring website. No customer data, no cookies.",
+  "dataHeading": "What KIscore reads",
+  "dataDescription": "KIscore reads Shopify's own session statistics of your shop: visits from AI channels and the share of bots, per day and page. The app adds no code to your shop, and no customer data is transferred.",
   "crawlerLimit": "Visits of AI crawlers such as GPTBot cannot be measured on Shopify, as Shopify gives apps no access to requests of the online store.",
   "errors": {
     "invalidKey": "This is not a connection key. Copy it again from KIscore; it has the form site-id.secret.",
     "rejected": "KIscore did not accept this key. Check that you copied the key of the right website.",
     "failed": "KIscore could not connect the shop. Please try again later.",
     "unreachable": "KIscore could not be reached. Check your connection and try again.",
-    "pixel": "The shop is connected, but the tracking could not be switched on. Please try again."
+    "store": "The shop is connected, but the app could not save the connection. Please try again."
   }
 }
