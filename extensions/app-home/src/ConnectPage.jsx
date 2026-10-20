@@ -37,10 +37,16 @@ export default function ConnectPage() {
     }
     setSaving(true)
     try {
+      // Admin UI extensions expose the ID token under shopify.auth.
+      const idToken = await shopify.auth.idToken()
+      if (!idToken) {
+        setError("failed")
+        return
+      }
       const result = await connectShop({
         apiBase: KISCORE_API,
         connectionKey: key.trim(),
-        idToken: await shopify.idToken(),
+        idToken,
         fetch,
       })
       if (!result.ok) {
@@ -59,6 +65,8 @@ export default function ConnectPage() {
       setKey("")
       await refresh()
       shopify.toast.show(t("connected"))
+    } catch {
+      setError("failed")
     } finally {
       setSaving(false)
     }
