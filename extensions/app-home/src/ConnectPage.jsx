@@ -76,7 +76,8 @@ export default function ConnectPage() {
 
       <s-section heading={pixel.siteId ? t("changeHeading") : t("connectHeading")}>
         <s-stack gap="base">
-          <s-text-field
+          {/* The key holds the tracking secret: masked like a password. */}
+          <s-password-field
             label={t("keyLabel")}
             value={key}
             error={error ? t(`errors.${error}`) : undefined}

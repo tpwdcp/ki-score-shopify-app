@@ -13,7 +13,7 @@ receives the data. Research and decisions behind it:
   the Shopify ID token, then activates the web pixel with the public site ID.
 - **Web pixel** (`extensions/kiscore-pixel`): for page views with `utm_*`
   parameters or an external referrer it posts the path, the utm parameters and
-  the referrer to the app proxy `/apps/kiscore/track` of the store. It runs
+  the origin of the referrer to the app proxy `/apps/kiscore/track` of the store. It runs
   only with analytics consent and holds no secret.
 - **App proxy** (`shopify.app.toml`): Shopify forwards `/apps/kiscore/*` to
   KIscore and signs each request (HMAC over the query parameters, including
@@ -30,7 +30,7 @@ Both endpoints still have to be built in the KIscore backend.
 | Endpoint | Auth | Body | Answer |
 | --- | --- | --- | --- |
 | `POST https://api.kiscore.ai/shopify/connections` | `Authorization: Bearer <Shopify ID token>`, a JWT signed with the app's client secret; `dest` names the shop | `{ "connection_key": "<site-id>.<secret>" }` | `201 { "site_id": "…" }`; `401`/`422` for a token or key that is not valid |
-| `POST https://api.kiscore.ai/shopify/app_proxy/track` | Shopify app proxy `signature` over the query parameters, with `shop` and `timestamp` | `{ "url": "/path?utm_source=…", "referrer": "…", "site_id": "…" }` | `204`; only AI referrals are stored, for the website connected to `shop` |
+| `POST https://api.kiscore.ai/shopify/app_proxy/track` | Shopify app proxy `signature` over the query parameters, with `shop` and `timestamp` | `{ "url": "/path?utm_source=…", "referrer": "https://chatgpt.com", "site_id": "…" }` | `204`; only AI referrals are stored, for the website connected to `shop` |
 
 The connections endpoint is called from the Shopify admin (app home), so it
 needs CORS for the extension's origin. The client secret of the app belongs

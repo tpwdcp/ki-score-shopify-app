@@ -2,6 +2,8 @@
 
 client_id = "33eaebf84b954b4cc5a7d71413172060"
 name = "KIscore"
+# Not a placeholder: extension-only apps use Shopify's default app home, the
+# admin page is the app-home extension that Shopify serves itself.
 application_url = "https://shopify.dev/apps/default-app-home"
 embedded = true
 

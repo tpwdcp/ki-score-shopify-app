@@ -18,7 +18,16 @@ test("reports a visit with utm_source, without other query parameters", () => {
 test("reports a visit that arrives from another site", () => {
   assert.deepEqual(
     referralReport({ href: "https://shop.example/", referrer: "https://www.perplexity.ai/" }),
-    { url: "/", referrer: "https://www.perplexity.ai/" }
+    { url: "/", referrer: "https://www.perplexity.ai" }
+  )
+})
+
+// KIscore needs the referring site, not the page: a referrer policy such as
+// unsafe-url would otherwise send its path and query along.
+test("sends only the origin of the referrer", () => {
+  assert.deepEqual(
+    referralReport({ href: "https://shop.example/", referrer: "https://chatgpt.com/c/123?token=x" }),
+    { url: "/", referrer: "https://chatgpt.com" }
   )
 })
 
