@@ -19,6 +19,7 @@
   "errors": {
     "invalidKey": "Das ist kein Verbindungsschlüssel. Kopiere ihn erneut aus KIscore, er hat die Form site-id.secret.",
     "rejected": "KIscore hat diesen Schlüssel nicht angenommen. Prüfe, ob du den Schlüssel der richtigen Website kopiert hast.",
+    "plan": "Der Tarif dieser Website in KIscore enthält keinen KI-Traffic. Wechsle in KIscore den Tarif und verbinde dann erneut.",
     "failed": "KIscore konnte den Shop nicht verbinden. Bitte versuche es später erneut.",
     "unreachable": "KIscore ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
     "store": "Der Shop ist verbunden, aber die App konnte die Verbindung nicht speichern. Bitte versuche es erneut."

@@ -35,9 +35,9 @@ export async function connectShop({ apiBase, connectionKey, idToken, fetch }) {
     return { ok: false, error: "unreachable" }
   }
 
-  if (response.status === 401 || response.status === 403 || response.status === 422) {
-    return { ok: false, error: "rejected" }
-  }
+  // The key is fine, but the plan of the website does not include AI traffic.
+  if (response.status === 403) return { ok: false, error: "plan" }
+  if (response.status === 401 || response.status === 422) return { ok: false, error: "rejected" }
   if (!response.ok) return { ok: false, error: "failed" }
 
   const body = await response.json().catch(() => ({}))

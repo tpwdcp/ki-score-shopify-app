@@ -19,6 +19,7 @@
   "errors": {
     "invalidKey": "This is not a connection key. Copy it again from KIscore; it has the form site-id.secret.",
     "rejected": "KIscore did not accept this key. Check that you copied the key of the right website.",
+    "plan": "The plan of this website in KIscore does not include AI traffic. Upgrade the plan in KIscore, then connect again.",
     "failed": "KIscore could not connect the shop. Please try again later.",
     "unreachable": "KIscore could not be reached. Check your connection and try again.",
     "store": "The shop is connected, but the app could not save the connection. Please try again."

@@ -40,6 +40,10 @@ test("names why KIscore refused the connection", async () => {
   const connect = (fetch) => connectShop({ apiBase: "https://api.kiscore.ai", connectionKey: "a.b", idToken: "t", fetch })
 
   assert.deepEqual(await connect(answer(401)), { ok: false, error: "rejected" })
+  assert.deepEqual(await connect(answer(422)), { ok: false, error: "rejected" })
+  // 403 is not a wrong key: the plan of the website does not include AI
+  // traffic. Sending the merchant back to copy the key would never help.
+  assert.deepEqual(await connect(answer(403)), { ok: false, error: "plan" })
   assert.deepEqual(await connect(answer(500)), { ok: false, error: "failed" })
   assert.deepEqual(
     await connect(async () => {
