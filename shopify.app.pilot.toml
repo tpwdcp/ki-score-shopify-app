@@ -22,5 +22,17 @@ redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
 [webhooks]
 api_version = "2027-01"
 
+# Mandatory for every app in the App Store. KIscore holds no customer data,
+# so the two customer topics are only acknowledged; shop/redact erases the
+# connection and the imported session statistics of the shop.
+[[webhooks.subscriptions]]
+compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+uri = "https://api.kiscore.ai/api/v1/shopify/webhooks"
+
+# KIscore drops the shop's tokens and stops the nightly import.
+[[webhooks.subscriptions]]
+topics = ["app/uninstalled"]
+uri = "https://api.kiscore.ai/api/v1/shopify/webhooks"
+
 [build]
 automatically_update_urls_on_dev = true

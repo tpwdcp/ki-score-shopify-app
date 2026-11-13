@@ -10,6 +10,18 @@ embedded = true
 [webhooks]
 api_version = "2027-01"
 
+# Mandatory for every app in the App Store. KIscore holds no customer data,
+# so the two customer topics are only acknowledged; shop/redact erases the
+# connection and the imported session statistics of the shop.
+[[webhooks.subscriptions]]
+compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+uri = "https://api.kiscore.ai/api/v1/shopify/webhooks"
+
+# KIscore drops the shop's tokens and stops the nightly import.
+[[webhooks.subscriptions]]
+topics = ["app/uninstalled"]
+uri = "https://api.kiscore.ai/api/v1/shopify/webhooks"
+
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 # read_reports: KIscore reads the shop's session statistics (ShopifyQL).
